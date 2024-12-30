@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>WelcomeMessage</members>
-		<name>CustomLabel</name>
-	</types>
-	<types>
-		<members>Account.CreateOpportunity__c</members>
-		<name>CustomField</name>
+		<members>AccountTriggerHandler</members>
+		<name>ApexClass</name>
 	</types>
 	<types>
 		<members>AccountTrigger</members>
 		<name>ApexTrigger</name>
 	</types>
 	<types>
-		<members>AccountTriggerHandler</members>
-		<name>ApexClass</name>
+		<members>Event_Management</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>Account.CreateOpportunity__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>WelcomeMessage</members>
+		<name>CustomLabel</name>
+	</types>
+	<types>
+		<members>Attendee__c</members>
+		<members>Event__c</members>
+		<members>Session__c</members>
+		<members>Speaker__c</members>
+		<members>Sponsor__c</members>
+		<members>Ticket__c</members>
+		<members>Venue__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Attendee__c</members>
+		<members>Event__c</members>
+		<members>Session__c</members>
+		<members>Speaker__c</members>
+		<members>Sponsor__c</members>
+		<members>Ticket__c</members>
+		<members>Venue__c</members>
+		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>Event_Management_Application_Home_Page</members>
+		<name>FlexiPage</name>
 	</types>
 	<types>
 		<members>*</members>
 		<name>Flow</name>
+	</types>
+	<types>
+		<members>Attendee__c-Attendee Layout</members>
+		<members>Event__c-Event Layout</members>
+		<members>Session__c-Session Layout</members>
+		<members>Speaker__c-Speaker Layout</members>
+		<members>Sponsor__c-Sponsor Layout</members>
+		<members>Ticket__c-Ticket Layout</members>
+		<members>Venue__c-Venue Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>Password_Never_Expires</members>
+		<members>UserManagementObjectPermissions</members>
+		<name>PermissionSet</name>
 	</types>
 	<version>62.0</version>
 </Package>
