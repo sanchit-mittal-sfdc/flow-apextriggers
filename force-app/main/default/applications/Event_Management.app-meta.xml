@@ -25,6 +25,7 @@
     <tabs>Venue__c</tabs>
     <tabs>Sponsor__c</tabs>
     <tabs>Speaker__c</tabs>
+    <tabs>Session__c</tabs>
     <tabs>Attendee__c</tabs>
     <tabs>Ticket__c</tabs>
     <uiType>Lightning</uiType>
