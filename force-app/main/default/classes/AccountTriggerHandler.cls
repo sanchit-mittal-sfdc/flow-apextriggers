@@ -6,7 +6,12 @@ public with sharing class AccountTriggerHandler {
     private static final String USER_NAME = 'amitacertifications@gmail.com.learning.dev1-sfp';
     
     private static List<Product2> getRandomProducts() {
-        return [SELECT Id, Name FROM Product2 LIMIT 3];
+        if (Schema.sObjectType.Product2.isAccessible() && 
+            Schema.sObjectType.Product2.fields.Id.isAccessible() && 
+            Schema.sObjectType.Product2.fields.Name.isAccessible()) {
+            return [SELECT Id, Name FROM Product2 LIMIT 3];
+        }
+        return new List<Product2>();
     }
 
     /**
@@ -25,11 +30,14 @@ public with sharing class AccountTriggerHandler {
     private static Map<Id, Map<String, Object>> getPricebookEntryMap(Set<Id> productIds) {
         Map<Id, Map<String, Object>> pricebookEntryMap = new Map<Id, Map<String, Object>>();
         
-        List<PricebookEntry> pricebookEntries = [
-            SELECT Id, Product2Id, UnitPrice 
+        List<PricebookEntry> pricebookEntries = Schema.sObjectType.PricebookEntry.isAccessible() &&
+            Schema.sObjectType.PricebookEntry.fields.Id.isAccessible() &&
+            Schema.sObjectType.PricebookEntry.fields.Product2Id.isAccessible() &&
+            Schema.sObjectType.PricebookEntry.fields.UnitPrice.isAccessible() ?
+            [SELECT Id, Product2Id, UnitPrice 
             FROM PricebookEntry 
-            WHERE Product2Id IN :productIds
-        ];
+            WHERE Product2Id IN :productIds] :
+            new List<PricebookEntry>();
         
         for (PricebookEntry pbe : pricebookEntries) {
             Map<String, Object> entryDetails = new Map<String, Object>{
@@ -43,51 +51,74 @@ public with sharing class AccountTriggerHandler {
     }
 
     public static void handleAfterInsert(List<Account> newAccounts) {
-        List<Opportunity> opportunitiesToCreate = new List<Opportunity>();
-        List<OpportunityLineItem> lineItemsToCreate = new List<OpportunityLineItem>();
-        Set<Id> productIds = new Set<Id>();
+        List<Opportunity> opportunitiesToCreate = createOpportunities(newAccounts);
         
-        for (Account acc : newAccounts) {
+        if (!opportunitiesToCreate.isEmpty()) {
+            if (Schema.sObjectType.Opportunity.isCreateable()) {
+                insert opportunitiesToCreate;
+                createOpportunityLineItems(opportunitiesToCreate);
+            }
+        }
+    }
+
+    private static List<Opportunity> createOpportunities(List<Account> accounts) {
+        List<Opportunity> opportunities = new List<Opportunity>();
+        
+        for (Account acc : accounts) {
             if (acc.CreateOpportunity__c) {
-                Opportunity opp = new Opportunity(
+                opportunities.add(new Opportunity(
                     Name = acc.Name + ' Opportunity',
                     AccountId = acc.Id,
                     CloseDate = Date.today().addDays(30),
                     StageName = 'Prospecting'
-                );
-                opportunitiesToCreate.add(opp);
+                ));
             }
+        }
+        return opportunities;
+    }
+
+    private static void createOpportunityLineItems(List<Opportunity> opportunities) {
+        if (!Schema.sObjectType.OpportunityLineItem.isCreateable()) {
+            return;
         }
         
-        if (!opportunitiesToCreate.isEmpty()) {
-            insert opportunitiesToCreate;
-            
-            // Assuming you have a method to get random products
-            List<Product2> randomProducts = getRandomProducts();
-            for (Product2 prod : randomProducts) {
-                productIds.add(prod.Id);
-            }
-            
-            Map<Id, Map<String, Object>> pricebookEntryMap = getPricebookEntryMap(productIds);
-            
-            for (Opportunity opp : opportunitiesToCreate) {
-                for (Product2 prod : randomProducts) {
-                    if (pricebookEntryMap.containsKey(prod.Id)) {
-                        Map<String, Object> entryDetails = pricebookEntryMap.get(prod.Id);
-                        OpportunityLineItem lineItem = new OpportunityLineItem(
-                            OpportunityId = opp.Id,
-                            PricebookEntryId = (Id)entryDetails.get('PricebookEntryId'),
-                            Quantity = 1,
-                            UnitPrice = (Decimal)entryDetails.get('UnitPrice')
-                        );
-                        lineItemsToCreate.add(lineItem);
-                    }
-                }
-            }
-            
-            if (!lineItemsToCreate.isEmpty()) {
-                insert lineItemsToCreate;
+        List<Product2> randomProducts = getRandomProducts();
+        Set<Id> productIds = new Set<Id>();
+        for (Product2 prod : randomProducts) {
+            productIds.add(prod.Id);
+        }
+        
+        Map<Id, Map<String, Object>> pricebookEntryMap = getPricebookEntryMap(productIds);
+        List<OpportunityLineItem> lineItems = buildLineItems(opportunities, randomProducts, pricebookEntryMap);
+        
+        if (!lineItems.isEmpty()) {
+            if (Schema.sObjectType.OpportunityLineItem.isCreateable() &&
+                Schema.sObjectType.OpportunityLineItem.fields.OpportunityId.isCreateable() &&
+                Schema.sObjectType.OpportunityLineItem.fields.PricebookEntryId.isCreateable() &&
+                Schema.sObjectType.OpportunityLineItem.fields.Quantity.isCreateable() &&
+                Schema.sObjectType.OpportunityLineItem.fields.UnitPrice.isCreateable()) {
+                insert lineItems;
             }
         }
+    }
+
+    private static List<OpportunityLineItem> buildLineItems(List<Opportunity> opportunities, 
+        List<Product2> products, Map<Id, Map<String, Object>> pricebookEntryMap) {
+        List<OpportunityLineItem> lineItems = new List<OpportunityLineItem>();
+        
+        for (Opportunity opp : opportunities) {
+            for (Product2 prod : products) {
+                if (pricebookEntryMap.containsKey(prod.Id)) {
+                    Map<String, Object> entryDetails = pricebookEntryMap.get(prod.Id);
+                    lineItems.add(new OpportunityLineItem(
+                        OpportunityId = opp.Id,
+                        PricebookEntryId = (Id)entryDetails.get('PricebookEntryId'),
+                        Quantity = 1,
+                        UnitPrice = (Decimal)entryDetails.get('UnitPrice')
+                    ));
+                }
+            }
+        }
+        return lineItems;
     }
 }
