@@ -1,0 +1,6 @@
+SELECT Name, IsActive, Description FROM Pricebook2
+SELECT Name, IsActive, Description, ProductCode FROM Product2
+SELECT UnitPrice, UseStandardPrice, PriceBook2Id, Product2Id FROM PriceBookEntry
+
+sf data export tree --query "SELECT Name, IsActive, Description, IsStandard, (SELECT Name, UnitPrice, UseStandardPrice, ProductCode FROM PricebookEntries) FROM Pricebook2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
+sf data export tree --query "SELECT Name, IsActive, Description, ProductCode, (SELECT Name, UnitPrice, UseStandardPrice, ProductCode FROM PricebookEntries) FROM Product2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
