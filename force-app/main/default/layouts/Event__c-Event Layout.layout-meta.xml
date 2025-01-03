@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -24,6 +23,10 @@
                 <behavior>Required</behavior>
                 <field>Status__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>InvoicePrefix__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -41,6 +44,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>TicketPrefix__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -115,11 +122,52 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Status__c</fields>
+        <fields>VenueName__c</fields>
+        <fields>TShirtSize__c</fields>
+        <fields>TicketPrice__c</fields>
+        <fields>TicketSent__c</fields>
         <relatedList>Ticket__c.Event__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>StartTime__c</fields>
+        <fields>EndTime__c</fields>
+        <fields>SessionID__c</fields>
+        <fields>Speaker__c</fields>
+        <fields>ShortIntroduction__c</fields>
         <relatedList>Session__c.Event__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Sponsor__c.NAME</fields>
+        <fields>Sponsor__c.Status__c</fields>
+        <fields>Sponsor__c.Tier__c</fields>
+        <fields>Sponsor__c.Website__c</fields>
+        <fields>Sponsor__c.Year__c</fields>
+        <fields>Sponsor__c.PriceAfterDiscount__c</fields>
+        <relatedList>Event_Sponsor__c.Event__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Speaker__c.NAME</fields>
+        <fields>Speaker__c.Email__c</fields>
+        <fields>Speaker__c.Phone__c</fields>
+        <fields>Speaker__c.JobTitle__c</fields>
+        <fields>Speaker__c.Company__c</fields>
+        <relatedList>Event_Speaker__c.Event__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Status__c</fields>
+        <fields>Quantity__c</fields>
+        <fields>GrandTotal__c</fields>
+        <fields>InvoiceDate__c</fields>
+        <fields>DueDate__c</fields>
+        <fields>Sponsor__c</fields>
+        <relatedList>Invoice__c.Event__c</relatedList>
+        <sortField>GrandTotal__c</sortField>
+        <sortOrder>Desc</sortOrder>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

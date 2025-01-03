@@ -116,7 +116,21 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Event__c</fields>
+        <fields>StartTime__c</fields>
+        <fields>EndTime__c</fields>
+        <fields>ShortIntroduction__c</fields>
+        <fields>SessionID__c</fields>
         <relatedList>Session__c.Speaker__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Event__c.NAME</fields>
+        <fields>Event__c.Start_Date__c</fields>
+        <fields>Event__c.Status__c</fields>
+        <fields>Event__c.Location__c</fields>
+        <fields>Event__c.Type__c</fields>
+        <relatedList>Event_Speaker__c.Speaker__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
