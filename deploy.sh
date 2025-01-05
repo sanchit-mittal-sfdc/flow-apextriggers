@@ -33,6 +33,7 @@ sf config set target-dev-hub $DEV_HUB_ALIAS
 # exporting the data
 sf data export tree --query "SELECT Name, IsActive, Description, (SELECT UnitPrice, UseStandardPrice FROM PricebookEntries) FROM Pricebook2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
 sf data export tree --query "SELECT Name, IsActive, Description, ProductCode, (SELECT UnitPrice, UseStandardPrice FROM PricebookEntries) FROM Product2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
+sf data export tree --query "SELECT Name, Capacity__c, Street__c, State__c, Country__c, PostalCode__c, City__c, Website__c, (SELECT Name, Active__c, Start_Date__c, End_Date__c, Location__c, Type__c, Status__c, ShortDescription__c, DetailedDescription__c, InvoicePrefix__c, TicketPrefix__c, TicketPrice__c, EarlybirdTicketPrice__c, EarlybirdActive__c  FROM Events__r) FROM Venue__c" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR --plan
 
 # Create a new scratch org
 echo "Creating a new scratch org with alias '$SCRATCH_ORG_ALIAS' and duration '$SCRATCH_ORG_DURATION' days..."
@@ -48,6 +49,9 @@ do
   echo "Assigning permission set '$PERMISSION_SET_NAME' to the user '$SCRATCH_ORG_ALIAS' ..."
   sf org permset assign --name $PERMISSION_SET_NAME --target-org $SCRATCH_ORG_ALIAS
 done
+
+# importing the necessary data
+sf data import tree --plan $EXPORT_DIR/Venue__c-Event__c-plan.json --target-org $SCRATCH_ORG_ALIAS
 
 echo "Generating the new password for the user..."
 sf org generate password --length 12 --complexity 1 --target-org $SCRATCH_ORG_ALIAS

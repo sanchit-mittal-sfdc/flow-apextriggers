@@ -120,6 +120,7 @@
 		<members>Session_Record_Page</members>
 		<members>Sponsor_Record_Page</members>
 		<members>Ticket_Record_Page</members>
+		<members>Venue_Record_Page</members>
 		<name>FlexiPage</name>
 	</types>
 	<types>

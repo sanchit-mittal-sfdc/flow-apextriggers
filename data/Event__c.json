@@ -1,0 +1,23 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "Event__c",
+                "referenceId": "Event__cRef1"
+            },
+            "Name": "OneDreamin",
+            "Active__c": true,
+            "Start_Date__c": "2025-01-30T06:30:00.000+0000",
+            "End_Date__c": "2025-02-08T06:30:00.000+0000",
+            "Location__c": "@Venue__cRef1",
+            "Type__c": "In-Person",
+            "Status__c": "Planned",
+            "ShortDescription__c": "DEMO",
+            "InvoicePrefix__c": "ONE-",
+            "TicketPrefix__c": "INDF-",
+            "TicketPrice__c": 9999,
+            "EarlybirdTicketPrice__c": 7999,
+            "EarlybirdActive__c": false
+        }
+    ]
+}

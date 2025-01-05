@@ -1,3 +1,10 @@
+<!--
+  @description       : 
+  @author            : Amit Singh
+  @group             : 
+  @last modified on  : 01-05-2025
+  @last modified by  : Amit Singh
+-->
 <template>
     <lightning-spinner 
       alternative-text="Loading" 
@@ -14,9 +21,11 @@
             <lightning-input label="Company" value={attendee.companyName} required onchange={handleInputChange} name="companyName"></lightning-input>
             <lightning-combobox
                 label="T-shirt Size"
-                value={attendee.TShirtSize}
+                name="tshirtSize"
+                value={attendee.tshirtSize}
                 placeholder="Select a size"
                 options={tshirtOptions}
+                onchange={handleInputChange}
                 required>
             </lightning-combobox>
             <div class="button-container">

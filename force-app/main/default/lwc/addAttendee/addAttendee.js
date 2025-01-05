@@ -16,16 +16,19 @@ export default class AddAttendee extends LightningElement {
         phone: '',
         jobTitle: '',
         companyName: '',
-        eventId : ''
+        eventId : '',
+        tshirtSize : ''
     };
 
     isLoading = false;
 
     @track tshirtOptions = [
-        { label: 'Small', value: 'Small' },
-        { label: 'Medium', value: 'Medium' },
-        { label: 'Large', value: 'Large' },
-        { label: 'X-Large', value: 'X-Large' }
+        { label: 'Small', value: 'S' },
+        { label: 'Medium', value: 'M' },
+        { label: 'Large', value: 'L' },
+        { label: 'X-Large', value: 'XL' },
+        { label: 'XX-Large', value: 'XXL' },
+        { label: 'XXX-Large', value: 'XXXL' }
     ];
 
     async handleGenerateCandidate() {
@@ -37,6 +40,7 @@ export default class AddAttendee extends LightningElement {
         this.attendee.phone = candidate.phone;
         this.attendee.jobTitle = candidate.jobTitle;
         this.attendee.companyName = candidate.companyName;
+        this.attendee.tshirtSize = candidate.tshirtSize;
         this.isLoading = false;
     }
 

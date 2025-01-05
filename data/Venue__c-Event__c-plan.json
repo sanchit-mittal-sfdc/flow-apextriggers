@@ -1,0 +1,18 @@
+[
+    {
+        "sobject": "Venue__c",
+        "saveRefs": true,
+        "resolveRefs": false,
+        "files": [
+            "Venue__c.json"
+        ]
+    },
+    {
+        "sobject": "Event__c",
+        "saveRefs": false,
+        "resolveRefs": true,
+        "files": [
+            "Event__c.json"
+        ]
+    }
+]
