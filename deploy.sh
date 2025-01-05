@@ -64,7 +64,7 @@ sf org generate password --length 12 --complexity 1 --target-org $SCRATCH_ORG_AL
 echo "Opening the scratch org..."
 sf org open --target-org $SCRATCH_ORG_ALIAS
 
-echo "Deleting the scratch org..."
-sf org delete scratch --target-org $SCRATCH_ORG_ALIAS --no-prompt
+# echo "Deleting the scratch org..."
+# sf org delete scratch --target-org $SCRATCH_ORG_ALIAS --no-prompt
 
 echo "Deployment to scratch org completed successfully."

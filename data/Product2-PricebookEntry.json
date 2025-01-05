@@ -15,20 +15,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef1"
                         },
-                        "Name": "GenWatt Diesel 1000kW",
                         "UnitPrice": 100000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1060"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef2"
                         },
-                        "Name": "GenWatt Diesel 1000kW",
                         "UnitPrice": 100000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1060"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -48,20 +44,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef3"
                         },
-                        "Name": "GenWatt Diesel 200kW",
                         "UnitPrice": 25000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1040"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef4"
                         },
-                        "Name": "GenWatt Diesel 200kW",
                         "UnitPrice": 25000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1040"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -81,20 +73,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef5"
                         },
-                        "Name": "GenWatt Diesel 10kW",
                         "UnitPrice": 5000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1020"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef6"
                         },
-                        "Name": "GenWatt Diesel 10kW",
                         "UnitPrice": 5000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC1020"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -114,20 +102,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef7"
                         },
-                        "Name": "Installation: Industrial - High",
                         "UnitPrice": 85000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7080"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef8"
                         },
-                        "Name": "Installation: Industrial - High",
                         "UnitPrice": 85000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7080"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -147,20 +131,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef9"
                         },
-                        "Name": "SLA: Silver",
                         "UnitPrice": 20000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9040"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef10"
                         },
-                        "Name": "SLA: Silver",
                         "UnitPrice": 20000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9040"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -180,20 +160,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef11"
                         },
-                        "Name": "GenWatt Propane 500kW",
                         "UnitPrice": 50000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3040"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef12"
                         },
-                        "Name": "GenWatt Propane 500kW",
                         "UnitPrice": 50000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3040"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -213,20 +189,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef13"
                         },
-                        "Name": "SLA: Platinum",
                         "UnitPrice": 40000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9080"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef14"
                         },
-                        "Name": "SLA: Platinum",
                         "UnitPrice": 40000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9080"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -246,20 +218,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef15"
                         },
-                        "Name": "GenWatt Propane 100kW",
                         "UnitPrice": 15000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3020"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef16"
                         },
-                        "Name": "GenWatt Propane 100kW",
                         "UnitPrice": 15000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3020"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -279,20 +247,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef17"
                         },
-                        "Name": "GenWatt Propane 1500kW",
                         "UnitPrice": 120000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3060"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef18"
                         },
-                        "Name": "GenWatt Propane 1500kW",
                         "UnitPrice": 120000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC3060"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -312,20 +276,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef19"
                         },
-                        "Name": "SLA: Bronze",
                         "UnitPrice": 10000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9020"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef20"
                         },
-                        "Name": "SLA: Bronze",
                         "UnitPrice": 10000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9020"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -345,20 +305,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef21"
                         },
-                        "Name": "GenWatt Gasoline 750kW",
                         "UnitPrice": 75000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5040"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef22"
                         },
-                        "Name": "GenWatt Gasoline 750kW",
                         "UnitPrice": 75000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5040"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -378,20 +334,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef23"
                         },
-                        "Name": "Installation: Portable",
                         "UnitPrice": 5000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7020"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef24"
                         },
-                        "Name": "Installation: Portable",
                         "UnitPrice": 5000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7020"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -411,20 +363,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef25"
                         },
-                        "Name": "SLA: Gold",
                         "UnitPrice": 30000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9060"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef26"
                         },
-                        "Name": "SLA: Gold",
                         "UnitPrice": 30000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "SL9060"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -444,20 +392,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef27"
                         },
-                        "Name": "GenWatt Gasoline 300kW",
                         "UnitPrice": 35000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5020"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef28"
                         },
-                        "Name": "GenWatt Gasoline 300kW",
                         "UnitPrice": 35000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5020"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -477,20 +421,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef29"
                         },
-                        "Name": "Installation: Industrial - Low",
                         "UnitPrice": 20000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7040"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef30"
                         },
-                        "Name": "Installation: Industrial - Low",
                         "UnitPrice": 20000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7040"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -510,20 +450,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef31"
                         },
-                        "Name": "GenWatt Gasoline 2000kW",
                         "UnitPrice": 150000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5060"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef32"
                         },
-                        "Name": "GenWatt Gasoline 2000kW",
                         "UnitPrice": 150000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "GC5060"
+                        "UseStandardPrice": false
                     }
                 ]
             }
@@ -543,20 +479,16 @@
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef33"
                         },
-                        "Name": "Installation: Industrial - Medium",
                         "UnitPrice": 50000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7060"
+                        "UseStandardPrice": false
                     },
                     {
                         "attributes": {
                             "type": "PricebookEntry",
                             "referenceId": "PricebookEntryRef34"
                         },
-                        "Name": "Installation: Industrial - Medium",
                         "UnitPrice": 50000,
-                        "UseStandardPrice": false,
-                        "ProductCode": "IN7060"
+                        "UseStandardPrice": false
                     }
                 ]
             }

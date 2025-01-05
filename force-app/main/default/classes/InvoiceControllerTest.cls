@@ -33,16 +33,24 @@ public class InvoiceControllerTest {
         );
         insert sponsor;
 
+        Venue__c venue = new Venue__c(Name = 'Stage');
+        insert venue;
+
+        // Create a test event record
         Event__c testEvent = new Event__c(
             Name = 'Test Event',
-            Start_Date__c = System.now(),
-            End_Date__c = System.now().addDays(30),
-            Status__c = 'Draft',
-            ShortDescription__c = 'Short Description',
-            TicketPrefix__c = 'TST',
-            InvoicePrefix__c = 'INV'
+            Start_Date__c = Date.today(),
+            End_Date__c = Date.today().addDays(1),
+            Location__c = venue.Id,
+            TicketPrefix__c = 'TICKET-',
+            InvoicePrefix__c = 'INV-',
+            TicketPrice__c = 10.00,
+            EarlybirdTicketPrice__c = 10.00,
+            ShortDescription__c = 'Sample Description',
+            Status__c = 'Planned'
         );
         insert testEvent;
+
         // Create a test invoice
         Invoice__c testInvoice = new Invoice__c(
             Name = 'Test Invoice',

@@ -1,34 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>AccountTriggerHandler</members>
-		<members>UploadFileControllerTest</members>
-		<members>UploadFileController</members>
-		<members>DataTableController</members>
-		<members>DataTableControllerTest</members>
-		<members>FormulaBuilder</members>
-		<members>FormulaEvaluator</members>
-		<members>FormulaEvaluatorTest</members>
-		<members>InvoiceController</members>
-		<members>InvoiceControllerTest</members>
-		<members>OpportunityClosedTriggerTest</members>
-		<members>OpportunityTriggerHandler</members>
-		<members>PermUtils</members>
-		<members>PermUtilsTest</members>
-		<members>QuoteAcceptedTriggerTest</members>
-		<members>QuoteTriggerHandler</members>
-		<members>IDMLInsert</members>
-		<members>IDMLUpdate</members>
-		<members>IDMLDelete</members>
-		<members>IDMLUpsert</members>
-		<members>Logger</members>
-		<members>AbstractDmlOperations</members>
-		<members>AbstractDmlOperationsTest</members>
-		<members>LoggerTest</members>
+		<members>*</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>InvoicePDFPage</members>
+		<members>*</members>
 		<name>ApexPage</name>
 	</types>
 	<types>
@@ -48,6 +25,14 @@
 		<name>ContentAsset</name>
 	</types>
 	<types>
+		<members>*</members>
+		<name>CorsWhitelistOrigin</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>CspTrustedSite</name>
+	</types>
+	<types>
 		<members>Event_Management</members>
 		<name>CustomApplication</name>
 	</types>
@@ -62,6 +47,7 @@
 		<name>CustomLabel</name>
 	</types>
 	<types>
+		<members>Attendee__c</members>
 		<members>Booking__c</members>
 		<members>CourseBooking__c</members>
 		<members>CourseImage__c</members>
@@ -70,8 +56,13 @@
 		<members>DigitalProductToken__c</members>
 		<members>DigitalProduct__c</members>
 		<members>ErrorLog__c</members>
+		<members>Event_Speaker__c</members>
+		<members>Event_Sponsor__c</members>
+		<members>Event__c</members>
 		<members>Experience__c</members>
 		<members>FailedJobs__c</members>
+		<members>InvoiceLine__c</members>
+		<members>Invoice__c</members>
 		<members>Media__c</members>
 		<members>Paypal_Order__c</members>
 		<members>Portfolio__c</members>
@@ -79,12 +70,16 @@
 		<members>RazorpayPaymentLink__c</members>
 		<members>ScheduledCourse__c</members>
 		<members>Services__c</members>
+		<members>Session__c</members>
 		<members>Skill__c</members>
+		<members>Speaker__c</members>
+		<members>Sponsor__c</members>
 		<members>StripeInvoice__c</members>
 		<members>Student__c</members>
+		<members>Ticket__c</members>
 		<members>Trainer__c</members>
 		<members>TrainingCenter__c</members>
-		<members>Invoice__c</members>
+		<members>Venue__c</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
@@ -96,6 +91,7 @@
 		<members>DigitalProduct__c</members>
 		<members>ErrorLog__c</members>
 		<members>Experience__c</members>
+		<members>Invoice__c</members>
 		<members>Media__c</members>
 		<members>Paypal_Order__c</members>
 		<members>Portfolio__c</members>
@@ -105,9 +101,9 @@
 		<members>Services__c</members>
 		<members>Skill__c</members>
 		<members>Student__c</members>
+		<members>Ticket__c</members>
 		<members>Trainer__c</members>
 		<members>TrainingCenter__c</members>
-		<members>Invoice__c</members>
 		<name>CustomTab</name>
 	</types>
 	<types>
@@ -135,6 +131,7 @@
 		<name>GlobalValueSet</name>
 	</types>
 	<types>
+		<members>Attendee__c-Attendee Layout</members>
 		<members>Booking__c-Booking Layout</members>
 		<members>CourseBooking__c-Booking Layout</members>
 		<members>CourseImage__c-Course Image Layout</members>
@@ -143,8 +140,13 @@
 		<members>DigitalProductToken__c-Digital Product Token Layout</members>
 		<members>DigitalProduct__c-Digital Product Layout</members>
 		<members>ErrorLog__c-Error Log Layout</members>
+		<members>Event_Speaker__c-Event Speaker Layout</members>
+		<members>Event_Sponsor__c-Event Sponsor Layout</members>
+		<members>Event__c-Event Layout</members>
 		<members>Experience__c-Experience Layout</members>
 		<members>FailedJobs__c-Failed Jobs Layout</members>
+		<members>InvoiceLine__c-Invoice Line Item Layout</members>
+		<members>Invoice__c-Invoice Layout</members>
 		<members>Media__c-Media Layout</members>
 		<members>Paypal_Order__c-Paypal Order Layout</members>
 		<members>Portfolio__c-Portfolio Layout</members>
@@ -152,11 +154,16 @@
 		<members>RazorpayPaymentLink__c-Razorpay Payment Link Layout</members>
 		<members>ScheduledCourse__c-Scheduled Course Layout</members>
 		<members>Services__c-Services Layout</members>
+		<members>Session__c-Session Layout</members>
 		<members>Skill__c-Skill Layout</members>
+		<members>Speaker__c-Speaker Layout</members>
+		<members>Sponsor__c-Sponsor Layout</members>
 		<members>StripeInvoice__c-Stripe Invoice Layout</members>
 		<members>Student__c-Student Layout</members>
+		<members>Ticket__c-Ticket Layout</members>
 		<members>Trainer__c-Trainer Layout</members>
 		<members>TrainingCenter__c-Training Center Layout</members>
+		<members>Venue__c-Venue Layout</members>
 		<name>Layout</name>
 	</types>
 	<types>
@@ -170,6 +177,7 @@
 	</types>
 	<types>
 		<members>Attendee__c.UpdateAttendee</members>
+		<members>Event__c.Add_Attendee</members>
 		<members>Event__c.Update_Event</members>
 		<members>Session__c.Update_Record</members>
 		<members>Speaker__c.Update_Speaker</members>
