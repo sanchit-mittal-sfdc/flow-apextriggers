@@ -33,11 +33,14 @@ sf config set target-dev-hub $DEV_HUB_ALIAS
 # exporting the data
 sf data export tree --query "SELECT Name, IsActive, Description, (SELECT UnitPrice, UseStandardPrice FROM PricebookEntries) FROM Pricebook2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
 sf data export tree --query "SELECT Name, IsActive, Description, ProductCode, (SELECT UnitPrice, UseStandardPrice FROM PricebookEntries) FROM Product2" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR
-sf data export tree --query "SELECT Name, Capacity__c, Street__c, State__c, Country__c, PostalCode__c, City__c, Website__c, (SELECT Name, Active__c, Start_Date__c, End_Date__c, Location__c, Type__c, Status__c, ShortDescription__c, DetailedDescription__c, InvoicePrefix__c, TicketPrefix__c, TicketPrice__c, EarlybirdTicketPrice__c, EarlybirdActive__c  FROM Events__r) FROM Venue__c" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR --plan
+sf data export tree --query "SELECT Name, Capacity__c, Street__c, State__c, Country__c, PostalCode__c, City__c, Website__c, (SELECT Name, Active__c, Email__c, Phone__c, LogoUrl__c, Start_Date__c, End_Date__c, Location__c, Type__c, Status__c, ShortDescription__c, DetailedDescription__c, InvoicePrefix__c, TicketPrefix__c, TicketPrice__c, EarlybirdTicketPrice__c, EarlybirdActive__c, InvoiceEmailTemplateName__c  FROM Events__r) FROM Venue__c" --target-org $DEV_HUB_ALIAS --output-dir $EXPORT_DIR --plan
 
 # Create a new scratch org
 echo "Creating a new scratch org with alias '$SCRATCH_ORG_ALIAS' and duration '$SCRATCH_ORG_DURATION' days..."
 sf org create scratch --target-dev-hub $DEV_HUB_ALIAS --definition-file config/project-scratch-def.json --set-default --duration-days $SCRATCH_ORG_DURATION -a $SCRATCH_ORG_ALIAS
+
+echo "Creating the Email Template Folder in the scratch org..."
+sf project deploy start --metadata "EmailFolder" --target-org $SCRATCH_ORG_ALIAS
 
 # Push source to the scratch org
 echo "Pushing source to the scratch org..."
@@ -48,6 +51,8 @@ for PERMISSION_SET_NAME in "${PERMISSION_SETS[@]}"
 do
   echo "Assigning permission set '$PERMISSION_SET_NAME' to the user '$SCRATCH_ORG_ALIAS' ..."
   sf org permset assign --name $PERMISSION_SET_NAME --target-org $SCRATCH_ORG_ALIAS
+  # sf org permset assign --name Password_Never_Expires --target-org test-rzcvhuckqiia@example.com
+  # sf org permset assign --name UserManagementObjectPermissions --target-org test-rzcvhuckqiia@example.com
 done
 
 # importing the necessary data
@@ -68,7 +73,7 @@ sf org generate password --length 12 --complexity 1 --target-org $SCRATCH_ORG_AL
 echo "Opening the scratch org..."
 sf org open --target-org $SCRATCH_ORG_ALIAS
 
-# echo "Deleting the scratch org..."
-# sf org delete scratch --target-org $SCRATCH_ORG_ALIAS --no-prompt
-
-echo "Deployment to scratch org completed successfully."
+echo "Deleting the scratch org..."
+sf org delete scratch --target-org $SCRATCH_ORG_ALIAS --no-prompt
+# sf org delete scratch --target-org test-rzcvhuckqiia@example.com --no-prompt 
+echo "Deployment to scratch org completed successfully." 

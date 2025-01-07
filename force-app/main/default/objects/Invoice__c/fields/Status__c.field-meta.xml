@@ -17,9 +17,14 @@
                 <label>Draft</label>
             </value>
             <value>
-                <fullName>Send</fullName>
+                <fullName>Sent</fullName>
                 <default>false</default>
-                <label>Send</label>
+                <label>Sent</label>
+            </value>
+            <value>
+                <fullName>Awaiting Payment</fullName>
+                <default>false</default>
+                <label>Awaiting Payment</label>
             </value>
             <value>
                 <fullName>Paid</fullName>

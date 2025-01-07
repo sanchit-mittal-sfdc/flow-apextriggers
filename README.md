@@ -16,3 +16,55 @@ The `sfdx-project.json` file contains useful configuration information for your 
 - [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
 - [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
 - [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+
+
+### Key Directories and Files
+
+- **config/**: Contains project configuration files, including the scratch org definition.
+- **data/**: Contains sample data files for importing into Salesforce orgs.
+- **force-app/**: Contains the main source code for the Salesforce application.
+
+## How to Get Started
+
+1. **Clone the repository**:
+    ```sh
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
+
+2. **Install dependencies**:
+    ```sh
+    npm install
+    ```
+
+3. **Authorize an Org**:
+    ```sh
+    sfdx auth:web:login -a <alias>
+    ```
+
+4. **Create a Scratch Org**:
+    ```sh
+    sfdx force:org:create -s -f config/project-scratch-def.json -a <scratch-org-alias>
+    ```
+
+5. **Push source to Scratch Org**:
+    ```sh
+    sfdx force:source:push -u <scratch-org-alias>
+    ```
+
+6. **Assign a Permission Set**:
+    ```sh
+    sfdx force:user:permset:assign -n <permset-name> -u <scratch-org-alias>
+    ```
+
+7. **Open the Scratch Org**:
+    ```sh
+    sfdx force:org:open -u <scratch-org-alias>
+    ```
+
+## Data Import
+
+To import sample data, use the following commands:
+
+```sh
+sfdx force:data:tree:import -p data/Venue__c-Event__c-plan.json -u <scratch-org-alias>

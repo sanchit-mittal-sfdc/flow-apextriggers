@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Amit Singh
  * @group             : 
- * @last modified on  : 01-02-2025
+ * @last modified on  : 01-07-2025
  * @last modified by  : Amit Singh
 **/
 @isTest
@@ -47,7 +47,9 @@ public class InvoiceControllerTest {
             TicketPrice__c = 10.00,
             EarlybirdTicketPrice__c = 10.00,
             ShortDescription__c = 'Sample Description',
-            Status__c = 'Planned'
+            Status__c = 'Planned',
+            InvoiceEmailTemplateName__c = 'Invoice_PDF_Email_for_Payment',
+            Email__c = 'asingh@gmail.com'
         );
         insert testEvent;
 
@@ -92,9 +94,49 @@ public class InvoiceControllerTest {
         InvoiceController controller = new InvoiceController();
 
         // Verify the controller's behavior
-        System.assertNotEquals(null, controller.invoice, 'Invoice should not be null');
-        System.assertEquals('Test Invoice', controller.invoice.Name, 'Invoice name should be "Test Invoice"');
-        System.assertEquals(1, controller.invoice.Invoice_Line_Items__r.size(), 'There should be one invoice line item');
-        System.assertNotEquals('Test Line Item', controller.invoice.Invoice_Line_Items__r[0].Name, 'Line item name should be "Test Line Item"');
+        System.assertNotEquals(null, InvoiceController.invoice, 'Invoice should not be null');
+        System.assertEquals('Test Invoice', InvoiceController.invoice.Name, 'Invoice name should be "Test Invoice"');
+        System.assertEquals(1, InvoiceController.invoice.Invoice_Line_Items__r.size(), 'There should be one invoice line item');
+        System.assertNotEquals('Test Line Item', InvoiceController.invoice.Invoice_Line_Items__r[0].Name, 'Line item name should be "Test Line Item"');
+    }
+
+    @isTest
+    static void testGenerateOrUpdatePDF_NewPDF() {
+        // Retrieve the test invoice
+        Invoice__c testInvoice = [SELECT Id, Name FROM Invoice__c LIMIT 1];
+
+        // Call the method to be tested
+        Test.startTest();
+        InvoiceController.generatePDF(testInvoice.Id);
+        Test.stopTest();
+
+        // Verify that the PDF was created
+        ContentVersion pdf = [SELECT Id, Title FROM ContentVersion WHERE Title = :(testInvoice.Name+'.pdf') LIMIT 1];
+        System.assertNotEquals(null, pdf, 'PDF should be created');
+        System.assertEquals(testInvoice.Name+'.pdf', pdf.Title, 'PDF title should match');
+    }
+
+    @isTest
+    static void testGenerateOrUpdatePDF_UpdatePDF() {
+        // Retrieve the test invoice
+        Invoice__c testInvoice = [SELECT Id, Name FROM Invoice__c LIMIT 1];
+
+        // Create an initial PDF
+        ContentVersion initialPDF = new ContentVersion();
+        initialPDF.Title = testInvoice.Name+'.pdf';
+        initialPDF.PathOnClient = 'testInvoice.pdf' + '.pdf';
+        initialPDF.VersionData = Blob.valueOf('Initial PDF Content');
+        initialPDF.FirstPublishLocationId = testInvoice.Id;
+        insert initialPDF;
+
+        // Call the method to be tested
+        Test.startTest();
+        InvoiceController.saveAndEmailPDF(testInvoice.Id);
+        Test.stopTest();
+
+        // Verify that the PDF was updated
+        ContentVersion updatedPDF = [SELECT Id, Title, VersionData FROM ContentVersion WHERE Title = :(testInvoice.Name+'.pdf') LIMIT 1];
+        System.assertNotEquals(null, updatedPDF, 'PDF should be updated');
+        System.assertEquals(testInvoice.Name+'.pdf', updatedPDF.Title, 'PDF title should match');
     }
 }

@@ -83,28 +83,17 @@
 		<name>CustomObject</name>
 	</types>
 	<types>
-		<members>Booking__c</members>
-		<members>CourseBooking__c</members>
-		<members>CourseImage__c</members>
-		<members>Course__c</members>
-		<members>DigitalProductToken__c</members>
-		<members>DigitalProduct__c</members>
-		<members>ErrorLog__c</members>
-		<members>Experience__c</members>
-		<members>Invoice__c</members>
-		<members>Media__c</members>
-		<members>Paypal_Order__c</members>
-		<members>Portfolio__c</members>
-		<members>Project__c</members>
-		<members>RazorpayPaymentLink__c</members>
-		<members>ScheduledCourse__c</members>
-		<members>Services__c</members>
-		<members>Skill__c</members>
-		<members>Student__c</members>
-		<members>Ticket__c</members>
-		<members>Trainer__c</members>
-		<members>TrainingCenter__c</members>
+		<members>*</members>
 		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>Event_Management/Invoice_PDF_Email_for_Payment</members>
+		<members>Event_Management/Send_the_Invoice_PDF_for_Payment</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+		<members>Event_Management</members>
+		<name>EmailFolder</name>
 	</types>
 	<types>
 		<members>Course_Booking_Record_Page</members>
@@ -180,10 +169,15 @@
 		<members>Attendee__c.UpdateAttendee</members>
 		<members>Event__c.Add_Attendee</members>
 		<members>Event__c.Update_Event</members>
+		<members>Invoice__c.Generate_Invoice_PDF</members>
 		<members>Session__c.Update_Record</members>
 		<members>Speaker__c.Update_Speaker</members>
 		<members>Venue__c.Update_Location</members>
 		<name>QuickAction</name>
+	</types>
+	<types>
+		<members>Quote</members>
+		<name>Settings</name>
 	</types>
 	<version>62.0</version>
 </Package>

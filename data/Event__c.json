@@ -7,6 +7,9 @@
             },
             "Name": "OneDreamin",
             "Active__c": true,
+            "Email__c": "amit@onedreamin.com",
+            "Phone__c": "9856321470",
+            "LogoUrl__c": "https://onedreamin3-dev-ed.develop.file.force.com/sfc/dist/version/renditionDownload?rendition=ORIGINAL_Jpg&oid=00DNS000008FGhN&versionId=068NS00000Jbvu1&d=%2Fa%2FNS0000001aJB%2F40TRIHAJ0tn1bnLyQrHGXTwBQSsqBePLPbVLycOQloE&asPdf=false",
             "Start_Date__c": "2025-01-30T06:30:00.000+0000",
             "End_Date__c": "2025-02-08T06:30:00.000+0000",
             "Location__c": "@Venue__cRef1",
@@ -17,7 +20,8 @@
             "TicketPrefix__c": "INDF-",
             "TicketPrice__c": 9999,
             "EarlybirdTicketPrice__c": 7999,
-            "EarlybirdActive__c": false
+            "EarlybirdActive__c": false,
+            "InvoiceEmailTemplateName__c": "Invoice_PDF_Email_for_Payment"
         }
     ]
 }

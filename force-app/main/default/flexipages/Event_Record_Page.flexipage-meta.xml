@@ -169,6 +169,19 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>fieldApiName</name>
+                    <value>LogoUrl__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>recordId</name>
+                </componentInstanceProperties>
+                <componentName>uploadFile</componentName>
+                <identifier>c_uploadFile</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>lookupFieldName</name>
                     <value>Event__c.Location__c</value>
                 </componentInstanceProperties>
