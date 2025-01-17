@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : Amit Singh
+ * @group             : 
+ * @last modified on  : 01-17-2025
+ * @last modified by  : Amit Singh
+**/
 @isTest
 private class AccountTriggerTest {
     
@@ -9,6 +16,7 @@ private class AccountTriggerTest {
             accounts.add(new Account(Name = 'Test Account ' + i));
         }
         insert accounts;
+        /** Added a Sample Comment */
     }
     
     @isTest
