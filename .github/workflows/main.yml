@@ -35,6 +35,7 @@ jobs: # A workflow run is made up of one or more jobs
           echo "This is the third line"
 
   deploy:
+    needs: [build, test]
     runs-on: ubuntu-latest # The type of runner that the job will run on
     steps: # A sequence of tasks that will be executed as
       - name: "Checkout" # Name of the step
@@ -49,6 +50,7 @@ jobs: # A workflow run is made up of one or more jobs
           echo "This is the second line"
           echo "This is the third line"
   Explore-GitHub-Actions: #Job Name
+    needs: [build, test] # Job Dependency
     runs-on: ubuntu-latest # Provided and Managed by Github
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
