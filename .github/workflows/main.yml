@@ -4,6 +4,50 @@ run-name: "My First Run"
 on: [push]
 
 jobs: # A workflow run is made up of one or more jobs
+  build:
+    runs-on: ubuntu-latest # The type of runner that the job will run on
+    steps: # A sequence of tasks that will be executed as
+      - name: "Checkout" # Name of the step
+        uses: actions/checkout@v2 # The action to run
+        with:
+          fetch-depth: 0
+      - name: "Run a one-line script" # Name of the step
+        run: echo "Hello, world!" # The script to run
+      - name: "Run a multi-line script" # Name of the step
+        run: |
+          echo "This is the first line"
+          echo "This is the second line"
+          echo "This is the third line"
+
+  test:
+    runs-on: ubuntu-latest # The type of runner that the job will run on
+    steps: # A sequence of tasks that will be executed as
+      - name: "Checkout" # Name of the step
+        uses: actions/checkout@v2 # The action to run
+        with:
+          fetch-depth: 0
+      - name: "Run a one-line script" # Name of the step
+        run: echo "Hello, world!" # The script to run
+      - name: "Run a multi-line script" # Name of the step
+        run: |
+          echo "This is the first line"
+          echo "This is the second line"
+          echo "This is the third line"
+
+  deploy:
+    runs-on: ubuntu-latest # The type of runner that the job will run on
+    steps: # A sequence of tasks that will be executed as
+      - name: "Checkout" # Name of the step
+        uses: actions/checkout@v2 # The action to run
+        with:
+          fetch-depth: 0
+      - name: "Run a one-line script" # Name of the step
+        run: echo "Hello, world!" # The script to run
+      - name: "Run a multi-line script" # Name of the step
+        run: |
+          echo "This is the first line"
+          echo "This is the second line"
+          echo "This is the third line"
   Explore-GitHub-Actions: #Job Name
     runs-on: ubuntu-latest # Provided and Managed by Github
     steps:
@@ -16,7 +60,13 @@ jobs: # A workflow run is made up of one or more jobs
         with:
           fetch-depth: 0
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: Print Github Context
+        run: |
+          echo "🖥️ GitHub Context"
+          echo "The event name is ${{ toJson(github) }}"
+      - name: Print Information
+        run: | 
+          echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
