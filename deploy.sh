@@ -1,4 +1,4 @@
-# Variables Default values
+# Define Variables with Default values
 DEFAULT_SCRATCH_ORG_DURATION=7
 DEFAULT_DEV_HUB_ALIAS="flow+triggers"
 EXPORT_DIR="data"
