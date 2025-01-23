@@ -18,10 +18,16 @@ jobs: # A workflow run is made up of one or more jobs
           echo "This is the first line"
           echo "This is the second line"
           echo "This is the third line"
+      - name: Install Salesforce CLI
+        run: |
+          # Use Node.js to install Salesforce CLI
+          npm install -g @salesforce/cli
 
   test:
     runs-on: ubuntu-latest # The type of runner that the job will run on
     steps: # A sequence of tasks that will be executed as
+      - name: Check Salesforce CLI Version
+        run: sf --version
       - name: "Checkout" # Name of the step
         uses: actions/checkout@v2 # The action to run
         with:
