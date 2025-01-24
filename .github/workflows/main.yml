@@ -24,3 +24,9 @@ jobs:
         run: |
           # Authenticate to Salesforce
           sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ vars.SF_ALIAS }} --instance-url ${{ vars.SF_INSTANCE_URL }}
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy to Salesforce
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --manifest manifest/package.xml --dry-run --wait 10
