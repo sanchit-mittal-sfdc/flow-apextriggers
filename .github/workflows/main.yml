@@ -1,7 +1,16 @@
 name: "My First Workflow"
 run-name: "My First Run"
 
-on: [push]
+## Push event should only work in case of feature branches
+on: 
+  # workflow_dispatch:
+  push:
+    branches:
+      - feature/**
+    paths:
+      - 'force-app/**'
+  # pull_request:
+
 
 jobs: 
   build:
