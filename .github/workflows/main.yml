@@ -3,13 +3,23 @@ run-name: "My First Run"
 
 ## Push event should only work in case of feature branches
 on: 
-  # workflow_dispatch:
+  workflow_dispatch:
   push:
     branches:
       - feature/**
     paths:
       - 'force-app/**'
-  # pull_request:
+  pull_request:
+    branches:
+      - master
+      - main
+      - uat 
+    paths:
+      - 'force-app/**'
+    types:
+      - opened
+      - synchronize
+      - closed
 
 
 jobs: 
