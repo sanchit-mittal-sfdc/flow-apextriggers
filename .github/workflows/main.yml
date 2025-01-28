@@ -25,7 +25,7 @@ on:
 jobs: 
   build:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: uat
     steps: 
       - name: "Checkout"
         uses: actions/checkout@v2 
