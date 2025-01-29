@@ -44,7 +44,7 @@ jobs:
         run: |
           # Run Salesforce Code Analyzer
           mkdir scanned_reports
-          sf scanner run --format html --target "force-app" --engine "eslint-lwc,retire-js,pmd,cpd" --category "Design,Best Practices,Code Style,Performance,Security" --outfile scanned_reports/scan-reports.html
+          sf scanner run --format html --target "force-app" --engine "eslint-lwc,retire-js,pmd,cpd" --category "Design,Best Practices,Code Style,Performance,Security" --outfile scanned_reports/scan-reports.html --severity-threshold 3
 
       - name: Upload Scanner Result as Artefacts
         uses: actions/upload-artifact@v4.6.0
