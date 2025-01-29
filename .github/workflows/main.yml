@@ -49,7 +49,7 @@ jobs:
         run: |
           # Run Salesforce Code Analyzer
           mkdir scanned_reports
-          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{OUTPUT_FILE}} --severity-threshold 3
+          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }} --severity-threshold 3
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
