@@ -21,7 +21,6 @@ on:
       - synchronize
       - closed
 
-
 jobs: 
   build:
     runs-on: ubuntu-latest
@@ -36,6 +35,17 @@ jobs:
           # Use Node.js to install Salesforce CLI
           npm install -g @salesforce/cli
           sf --version
+      - name: Install Salesforce Code Analyzer
+        run: |
+          # Install Salesforce Code Analyzer
+          sf plugins install @salesforce/sfdx-scanner
+
+      - name: Run Salesforce Code Analyzer
+        run: |
+          # Run Salesforce Code Analyzer
+          mkdir reports
+          sf scanner run --format html --target "force-app" --engine "eslint-lwc,retire-js,pmd,cpd" --category "Design,Best Practices,Code Style,Performance,Security" --outfile reports/scan-reports.html
+
       - name: Decrypt JWT Key
         run: |
           # Decrypt the JWT key
