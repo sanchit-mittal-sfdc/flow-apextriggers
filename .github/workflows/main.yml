@@ -20,17 +20,31 @@ on:
       - opened
       - synchronize
       - closed
-
+# Define Workflow Level Variables
 env:
   ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
   CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
   OUTPUT_FILE: "scanned_reports/scan-reports.html"
+  SF_ALIAS_VAR: "prod"
 
 jobs: 
   build:
     runs-on: ubuntu-latest
     environment: uat
+    # Define Job Level Variables
+    env:
+      SF_ALIAS_VAR: "uat"
+      SF_INSTANCE_URL_VAR: "https://test.salesforce.com"
     steps: 
+      - name: Print Local Variables
+        run: |
+          echo "ENGINES: $ENGINES"
+          echo "ENGINES: ${{ env.ENGINES }}"
+          echo "CATEGORY: $CATEGORY"
+          echo "OUTPUT_FILE: $OUTPUT_FILE"
+          echo "SF_ALIAS: $SF_ALIAS_VAR"
+          echo "SF_ALIAS: ${{ env.SF_ALIAS_VAR }}"
+          echo "SF_INSTANCE_URL: $SF_INSTANCE_URL_VAR"
       - name: "Checkout"
         uses: actions/checkout@v2 
         with:
@@ -48,16 +62,24 @@ jobs:
       - name: Run Salesforce Code Analyzer
         run: |
           # Run Salesforce Code Analyzer
+          # https://pmd.github.io/pmd/pmd_rules_apex.html
+          # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
           mkdir scanned_reports
-          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }} --severity-threshold 3
+          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
         uses: actions/upload-artifact@v4.6.0
         with:
           name: scan-reports
-          path: scanned_reports/scan-reports.html
+          path: ${{ env.OUTPUT_FILE }}
           if-no-files-found: ignore
+
+      - name: SonarQube Scan
+        # SonarQube, SonarSource, SonarCloud, SonarScanner
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Decrypt JWT Key
         run: |
