@@ -26,6 +26,7 @@ env:
   CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
   OUTPUT_FILE: "scanned_reports/scan-reports.html"
   SF_ALIAS_VAR: "prod"
+  TEST_LEVEL: "RunLocalTests"
 
 jobs: 
   build:
@@ -75,12 +76,6 @@ jobs:
           path: ${{ env.OUTPUT_FILE }}
           if-no-files-found: ignore
 
-      - name: SonarQube Scan
-        # SonarQube, SonarSource, SonarCloud, SonarScanner
-        uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
       - name: Decrypt JWT Key
         run: |
           # Decrypt the JWT key
@@ -90,6 +85,18 @@ jobs:
           # Authenticate to Salesforce
           sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ vars.SF_ALIAS }} --instance-url ${{ vars.SF_INSTANCE_URL }}
 
+      - name: Run the LocalTest Cases 
+        run: |
+          # Run the LocalTest Cases
+          # https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm
+          sf apex run test --target-org ${{ vars.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+      
+      - name: SonarQube Scan
+        # SonarQube, SonarSource, SonarCloud, SonarScanner
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
       - name: Validate to Salesforce
         run: |
           # Validate to Salesforce
