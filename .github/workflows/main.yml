@@ -1,6 +1,7 @@
 name: "My First Workflow"
 run-name: "My First Run"
 
+# PROD USERNAME - amit-pcdy@force.com
 ## Push event should only work in case of feature branches
 on: 
   workflow_dispatch:
@@ -31,7 +32,7 @@ env:
 jobs: 
   build:
     runs-on: ubuntu-latest
-    environment: uat
+    environment: production
     # Define Job Level Variables
     env:
       SF_ALIAS_VAR: "uat"
