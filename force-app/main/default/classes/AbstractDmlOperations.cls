@@ -10,6 +10,7 @@ public virtual class AbstractDmlOperations implements IDMLInsert, IDMLUpsert, ID
         List<Database.UpsertResult> results = Database.upsert(records, externalIdField, false);
     }
     // Some more methods
+    // Some more methods
     public virtual void upsertRecords(SObject record, Schema.SObjectField externalIdField) {
         List<Database.UpsertResult> results = Database.upsert(new List<SObject>{record}, externalIdField, false);
     }
