@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Amit Singh
  * @group             : 
- * @last modified on  : 01-03-2025
+ * @last modified on  : 01-29-2025
  * @last modified by  : Amit Singh
 **/
 public with sharing class Logger {
@@ -51,7 +51,7 @@ public with sharing class Logger {
         return this;
     }
     public ErrorLog__c build() {
-        insert this.logRecord;
+        insert as user this.logRecord;
         return this.logRecord;
     }
     public ErrorLog__c buildWithoutInsert() {

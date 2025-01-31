@@ -1,0 +1,140 @@
+name: "UAT Deployment Workflow"
+run-name: ${{ github.actor }} is running the UAT Deployment
+
+# PROD USERNAME - amit-pcdy@force.com
+## Push event should only work in case of feature branches
+on: 
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - feature/**
+  #  paths:
+  #    - 'force-app/**'
+
+  pull_request:
+    branches:
+      - uat
+      - UAT
+    paths:
+      - 'force-app/**'
+    types:
+      - opened
+      - synchronize
+      - closed
+# Define Workflow Level Variables
+env:
+  ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
+  CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
+  OUTPUT_FILE: "scanned_reports/scan-reports.html"
+  SF_ALIAS_VAR: "prod"
+  TEST_LEVEL: "RunLocalTests"
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    environment: uat
+    # Define Job Level Variables
+    env:
+      SF_ALIAS_VAR: "uat"
+      SF_INSTANCE_URL_VAR: "https://test.salesforce.com"
+    steps: 
+      - name: Print Local Variables
+        run: |
+          echo "ENGINES: $ENGINES"
+          echo "ENGINES: ${{ env.ENGINES }}"
+          echo "CATEGORY: $CATEGORY"
+          echo "OUTPUT_FILE: $OUTPUT_FILE"
+          echo "SF_ALIAS: $SF_ALIAS_VAR"
+          echo "SF_ALIAS: ${{ env.SF_ALIAS_VAR }}"
+          echo "SF_INSTANCE_URL: $SF_INSTANCE_URL_VAR"
+      - name: "Checkout"
+        uses: actions/checkout@v2 
+        with:
+          fetch-depth: 0
+      - name: Install Salesforce CLI
+        run: |
+          # Use Node.js to install Salesforce CLI
+          npm install -g @salesforce/cli
+          sf --version
+      - name: Install Salesforce Code Analyzer
+        run: |
+          # Install Salesforce Code Analyzer
+          sf plugins install @salesforce/sfdx-scanner
+
+      - name: Install SF DX GIT DELTA
+        run: |
+          # Install SF DX GIT DELTA
+          echo 'y' | sf plugins install sfdx-git-delta
+          mkdir delta
+
+      - name: Generate Delta for deployment
+        # https://github.com/scolladon/sfdx-git-delta
+        run: |
+          # Generate Delta for deployment
+          # https://github.com/scolladon/sfdx-git-delta
+          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
+          cat ./delta/package/package.xml
+          cat ./delta/destructiveChanges/destructiveChanges.xml
+          ls -l ./delta
+
+      - name: Run Salesforce Code Analyzer
+        run: |
+          # Run Salesforce Code Analyzer
+          # https://pmd.github.io/pmd/pmd_rules_apex.html
+          # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
+          mkdir scanned_reports
+          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+
+      - name: Upload Scanner Result as Artefacts
+        if: always() # success() || failure()
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: scan-reports
+          path: ${{ env.OUTPUT_FILE }}
+          if-no-files-found: ignore
+
+      - name: Decrypt JWT Key
+        run: |
+          # Decrypt the JWT key
+          openssl enc -nosalt -aes-256-cbc -d -in ${{ secrets.JWT_ENCRYPTION_KEY_FILE }} -out ${{ secrets.JWT_KEY_FILE }} -base64 -K ${{ secrets.ENCRYPTION_KEY }} -iv ${{ secrets.ENCRYPTION_IV }}
+      - name: Authenticate to Salesforce
+        run: |
+          # Authenticate to Salesforce
+          sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ vars.SF_ALIAS }} --instance-url ${{ vars.SF_INSTANCE_URL }}
+
+      - name: Run the LocalTest Cases 
+        run: |
+          # Run the LocalTest Cases
+          # https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm
+          sf apex run test --target-org ${{ vars.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+      
+      - name: SonarQube Scan
+        # SonarQube, SonarSource, SonarCloud, SonarScanner
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.apex.coverage.reportPath=test-result-codecoverage.json
+            -Dsonar.verbose=true
+            -Dsonar.language=apex
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.coverage.exclusions=**/*Test.cls
+            -Dsonar.exclusions=**/*.cmp,**/force-app/**/fflib_*.cls,**/*.yml,**/*.js,**/*.xml,**/*.css,**/*.html,**/*.woff2,**/*.woff,**/*.auradoc,**/*.svg,force-app/main/default/staticresources/**
+      
+      # CodeCov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          flags: Apex
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Validate to Salesforce
+        run: |
+          # Validate to Salesforce
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy to Salesforce
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --wait 10
