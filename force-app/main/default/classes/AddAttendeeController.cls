@@ -51,7 +51,7 @@ public without sharing class AddAttendeeController {
         // Check if the user has read access to Event__c
         if (!Schema.sObjectType.Event__c.isAccessible()) {
             throw new AuraHandledException('You do not have permission to access Event records.');
-        }
+        } 
 
         // Check field-level security for each field
         if (!Schema.sObjectType.Event__c.fields.Name.isAccessible() ||
