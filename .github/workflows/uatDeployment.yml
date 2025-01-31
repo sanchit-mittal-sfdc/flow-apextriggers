@@ -1,5 +1,5 @@
-name: "Production Deployment Workflow"
-run-name: ${{ github.actor }} is running the Production Deployment
+name: "UAT Deployment Workflow"
+run-name: ${{ github.actor }} is running the UAT Deployment
 
 # PROD USERNAME - amit-pcdy@force.com
 ## Push event should only work in case of feature branches
@@ -13,8 +13,8 @@ on:
 
   pull_request:
     branches:
-      - master
-      - main
+      - uat
+      - UAT
     paths:
       - 'force-app/**'
     types:
@@ -32,7 +32,7 @@ env:
 jobs: 
   build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: uat
     # Define Job Level Variables
     env:
       SF_ALIAS_VAR: "uat"
