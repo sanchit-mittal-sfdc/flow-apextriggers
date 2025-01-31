@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : Amit Singh
+ * @group             : 
+ * @last modified on  : 01-31-2025
+ * @last modified by  : Amit Singh
+**/
 public without sharing class AddAttendeeController {
     
     @AuraEnabled
@@ -55,7 +62,7 @@ public without sharing class AddAttendeeController {
             !Schema.sObjectType.Event__c.fields.TicketPrefix__c.isAccessible()) {
             throw new AuraHandledException('You do not have permission to access one or more fields of Event object.');
         }
-        
+        // Query the Event record
         return [
             SELECT Id, Name, Start_Date__c, End_Date__c, TicketPrice__c, EarlybirdTicketPrice__c,
             EarlybirdActive__c,

@@ -61,6 +61,17 @@ jobs:
           # Install Salesforce Code Analyzer
           sf plugins install @salesforce/sfdx-scanner
 
+      - name: Install SF DX GIT DELTA
+        run: |
+          # Install SF DX GIT DELTA
+          echo 'y' | sf plugins install sfdx-git-delta
+
+      - name: Generate Delta for deployment
+        # https://github.com/scolladon/sfdx-git-delta
+        run: |
+          # Generate Delta for deployment
+          # https://github.com/scolladon/sfdx-git-delta
+
       - name: Run Salesforce Code Analyzer
         run: |
           # Run Salesforce Code Analyzer
@@ -117,10 +128,8 @@ jobs:
         run: |
           # Validate to Salesforce
           sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
-          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --manifest manifest/package.xml --dry-run --wait 10
 
       - name: Deploy to Salesforce
         run: |
           # Deploy to Salesforce
           sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --wait 10
-          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --manifest manifest/package.xml --wait 10
