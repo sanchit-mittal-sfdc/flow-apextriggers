@@ -106,8 +106,21 @@ jobs:
             -Dsonar.coverage.exclusions=**/*Test.cls
             -Dsonar.exclusions=**/*.cmp,**/force-app/**/fflib_*.cls,**/*.yml,**/*.js,**/*.xml,**/*.css,**/*.html,**/*.woff2,**/*.woff,**/*.auradoc,**/*.svg,force-app/main/default/staticresources/**
       
+      # CodeCov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          flags: Apex
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Validate to Salesforce
         run: |
           # Validate to Salesforce
           sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
           sf project deploy start --target-org ${{ vars.SF_ALIAS }} --manifest manifest/package.xml --dry-run --wait 10
+
+      - name: Deploy to Salesforce
+        run: |
+          # Deploy to Salesforce
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --wait 10
+          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --manifest manifest/package.xml --wait 10
