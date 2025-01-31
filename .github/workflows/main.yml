@@ -73,6 +73,7 @@ jobs:
           # Generate Delta for deployment
           # https://github.com/scolladon/sfdx-git-delta
           sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
+          # sf sgd source delta --to "uat" --from "feature/ci-cd" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
           cat ./delta/package/package.xml
           cat ./delta/destructiveChanges/destructiveChanges.xml
           ls -l ./delta
@@ -83,7 +84,7 @@ jobs:
           # https://pmd.github.io/pmd/pmd_rules_apex.html
           # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
           mkdir scanned_reports
-          sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+          # sf scanner run --format html --target "./delta/force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
