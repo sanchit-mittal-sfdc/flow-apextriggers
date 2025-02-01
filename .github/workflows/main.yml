@@ -30,7 +30,23 @@ env:
   TEST_LEVEL: "RunLocalTests"
 
 jobs: 
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2 
+        with:
+          fetch-depth: 0
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions@0.4.0
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
   build:
+    needs: [security]
     runs-on: ubuntu-latest
     environment: production
     # Define Job Level Variables
