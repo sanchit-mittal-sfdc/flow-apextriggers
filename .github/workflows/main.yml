@@ -84,7 +84,7 @@ jobs:
           # https://pmd.github.io/pmd/pmd_rules_apex.html
           # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
           mkdir scanned_reports
-          # sf scanner run --format html --target "./delta/force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+          # sf scanner run --format html --target "delta/force-app/main/default" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
