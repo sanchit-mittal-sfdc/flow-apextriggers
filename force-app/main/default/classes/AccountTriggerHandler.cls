@@ -10,7 +10,8 @@ public with sharing class AccountTriggerHandler {
             Schema.sObjectType.Product2.fields.Id.isAccessible() && 
             Schema.sObjectType.Product2.fields.Name.isAccessible()) {
             return [SELECT Id, Name FROM Product2 LIMIT 3];
-        }
+        } 
+        // Schema.sObjectType.Product2 is not accessible
         return new List<Product2>();
     }
 

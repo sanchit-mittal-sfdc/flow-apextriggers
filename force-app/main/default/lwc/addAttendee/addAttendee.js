@@ -6,7 +6,7 @@ import { CloseActionScreenEvent } from 'lightning/actions';
 import { generateRandomCandidate } from 'c/randomCandidateGenerator'; // Adjust the import path as needed
 
 export default class AddAttendee extends LightningElement {
-
+    // ABCD000000000000AAA
     @api recordId;
     @api objectApiName;
 
