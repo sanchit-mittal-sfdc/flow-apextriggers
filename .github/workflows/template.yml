@@ -130,11 +130,24 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Validate to Salesforce
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
         run: |
-          # Validate to Salesforce
-          sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --dry-run --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
 
       - name: Deploy to Salesforce
+        # PR is merged and it's in Closed Status --> Deploy the changes
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' }}
         run: |
-          # Deploy to Salesforce
-          sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --source-dir force-app --wait 10
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+          
