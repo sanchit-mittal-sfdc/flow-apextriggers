@@ -55,6 +55,7 @@ const columns = [
 ];
 
 export default class DatatableComponent extends LightningElement {
+    /** Simple Comment */
     contactData;
     coulumList = columns;
     error;

@@ -1,56 +1,53 @@
-name: "Production Deployment Workflow"
-run-name: ${{ github.actor }} is running the Production Deployment
+name: Reusable Template
 
-# PROD USERNAME - amit-pcdy@force.com
-## Push event should only work in case of feature branches
 on: 
-  workflow_dispatch:
-  #push:
-  #  branches:
-  #    - feature/**
-  #  paths:
-  #    - 'force-app/**'
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      SF_INSTANCE_URL:
+        required: true
+        type: string
+      SF_ALIAS:
+        required: true
+        type: string
+      BRANCH_NAME: 
+        required: false
+        type: string
+    secrets:
+      JWT_ENCRYPTION_KEY_FILE:
+        required: true
+      JWT_KEY_FILE:
+        required: true
+      ENCRYPTION_KEY:
+        required: true
+      ENCRYPTION_IV:
+        required: true
+      SF_USER_NAME:
+        required: true
+      CONSUMER_KEY:
+        required: true
+      SONAR_TOKEN:
+        required: true
+      CODECOV_TOKEN:
+        required: true
 
-  pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - 'force-app/**'
-    types:
-      - opened
-      - synchronize
-      - closed
 # Define Workflow Level Variables
 env:
   ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
   CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
   OUTPUT_FILE: "scanned_reports/scan-reports.html"
-  SF_ALIAS_VAR: "prod"
+  # SF_ALIAS_VAR: "prod"
   TEST_LEVEL: "RunLocalTests"
 
-jobs: 
-
+jobs:
   build:
-    needs: [security]
     runs-on: ubuntu-latest
-    environment: production
-    # Define Job Level Variables
-    env:
-      SF_ALIAS_VAR: "uat"
-      SF_INSTANCE_URL_VAR: "https://test.salesforce.com"
+    environment: ${{ inputs.environment }}
     steps: 
-      - name: Print Local Variables
-        run: |
-          echo "ENGINES: $ENGINES"
-          echo "ENGINES: ${{ env.ENGINES }}"
-          echo "CATEGORY: $CATEGORY"
-          echo "OUTPUT_FILE: $OUTPUT_FILE"
-          echo "SF_ALIAS: $SF_ALIAS_VAR"
-          echo "SF_ALIAS: ${{ env.SF_ALIAS_VAR }}"
-          echo "SF_INSTANCE_URL: $SF_INSTANCE_URL_VAR"
       - name: "Checkout"
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v4 
         with:
           fetch-depth: 0
       - name: Install Salesforce CLI
@@ -103,13 +100,13 @@ jobs:
       - name: Authenticate to Salesforce
         run: |
           # Authenticate to Salesforce
-          sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ vars.SF_ALIAS }} --instance-url ${{ vars.SF_INSTANCE_URL }}
+          sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ inputs.SF_ALIAS }} --instance-url ${{ inputs.SF_INSTANCE_URL }}
 
       - name: Run the LocalTest Cases 
         run: |
           # Run the LocalTest Cases
           # https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm
-          sf apex run test --target-org ${{ vars.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+          sf apex run test --target-org ${{ inputs.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
       
       - name: SonarQube Scan
         # SonarQube, SonarSource, SonarCloud, SonarScanner
@@ -135,9 +132,9 @@ jobs:
       - name: Validate to Salesforce
         run: |
           # Validate to Salesforce
-          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
+          sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --source-dir force-app --dry-run --wait 10
 
       - name: Deploy to Salesforce
         run: |
           # Deploy to Salesforce
-          sf project deploy start --target-org ${{ vars.SF_ALIAS }} --source-dir force-app --wait 10
+          sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --source-dir force-app --wait 10

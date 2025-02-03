@@ -1,5 +1,5 @@
-name: "Production Deployment Workflow"
-run-name: ${{ github.actor }} is running the Production Deployment
+name: "UAT Deployment Workflow - DO NOT USE"
+run-name: ${{ github.actor }} is running the UAT Deployment
 
 # PROD USERNAME - amit-pcdy@force.com
 ## Push event should only work in case of feature branches
@@ -11,16 +11,16 @@ on:
   #  paths:
   #    - 'force-app/**'
 
-  pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - 'force-app/**'
-    types:
-      - opened
-      - synchronize
-      - closed
+  #pull_request:
+  #  branches:
+  #    - uat
+  #    - UAT
+  # paths:
+  #    - 'force-app/**'
+  #  types:
+  #    - opened
+  #    - synchronize
+  #    - closed
 # Define Workflow Level Variables
 env:
   ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
@@ -31,10 +31,24 @@ env:
 
 jobs: 
 
-  build:
-    needs: [security]
+  security:
     runs-on: ubuntu-latest
-    environment: production
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2 
+        with:
+          fetch-depth: 0
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions@0.4.0
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+  build:
+    runs-on: ubuntu-latest
+    environment: uat
+    needs: [security]
     # Define Job Level Variables
     env:
       SF_ALIAS_VAR: "uat"
@@ -75,7 +89,6 @@ jobs:
           # Generate Delta for deployment
           # https://github.com/scolladon/sfdx-git-delta
           sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
-          # sf sgd source delta --to "uat" --from "feature/ci-cd" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
           cat ./delta/package/package.xml
           cat ./delta/destructiveChanges/destructiveChanges.xml
           ls -l ./delta
@@ -86,7 +99,7 @@ jobs:
           # https://pmd.github.io/pmd/pmd_rules_apex.html
           # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
           mkdir scanned_reports
-          # sf scanner run --format html --target "delta/force-app/main/default" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+          # sf scanner run --format html --target "force-app" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
