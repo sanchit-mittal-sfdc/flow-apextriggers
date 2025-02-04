@@ -56,6 +56,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13' 
+
+      - name: Read the PR Body
+        run: |
+          echo "${{ github.event.pull_request.body }}"
+          echo "${{ github.event.pull_request.body }}" >> pr_body.txt
           
       - name: Install Salesforce CLI
         run: |
