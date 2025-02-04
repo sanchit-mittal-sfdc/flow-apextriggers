@@ -1,0 +1,206 @@
+name: Reusable Template
+
+on: 
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      SF_INSTANCE_URL:
+        required: true
+        type: string
+      SF_ALIAS:
+        required: true
+        type: string
+      BRANCH_NAME: 
+        required: false
+        type: string
+    secrets:
+      JWT_ENCRYPTION_KEY_FILE:
+        required: true
+      JWT_KEY_FILE:
+        required: true
+      ENCRYPTION_KEY:
+        required: true
+      ENCRYPTION_IV:
+        required: true
+      SF_USER_NAME:
+        required: true
+      CONSUMER_KEY:
+        required: true
+      SONAR_TOKEN:
+        required: true
+      CODECOV_TOKEN:
+        required: true
+
+# Define Workflow Level Variables
+env:
+  ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
+  CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
+  OUTPUT_FILE: "scanned_reports/scan-reports.html"
+  # SF_ALIAS_VAR: "prod"
+  TEST_LEVEL: "RunLocalTests"
+  APEX_TEST_CLASSES: LoggerTest PermUtilsTest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps: 
+      - name: "Checkout"
+        uses: actions/checkout@v4 
+        with:
+          fetch-depth: 0
+
+      - name: Setup Pypthon
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' 
+
+      - name: Read the PR Body
+        run: |
+          echo "${{ github.event.pull_request.body }}"
+          echo "${{ github.event.pull_request.body }}" >> pr_body.txt
+          
+      - name: Install Salesforce CLI
+        run: |
+          # Use Node.js to install Salesforce CLI
+          npm install -g @salesforce/cli
+          sf --version
+      - name: Install Salesforce Code Analyzer
+        run: |
+          # Install Salesforce Code Analyzer
+          sf plugins install @salesforce/sfdx-scanner
+
+      - name: Install SF DX GIT DELTA
+        run: |
+          # Install SF DX GIT DELTA
+          echo 'y' | sf plugins install sfdx-git-delta
+          mkdir delta
+
+      - name: Generate Delta for deployment
+        # https://github.com/scolladon/sfdx-git-delta
+        run: |
+          # Generate Delta for deployment
+          # https://github.com/scolladon/sfdx-git-delta
+          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
+          # sf sgd source delta --to "uat" --from "feature/ci-cd" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
+          cat ./delta/package/package.xml
+          cat ./delta/destructiveChanges/destructiveChanges.xml
+          ls -l ./delta
+
+      - name: Run Salesforce Code Analyzer
+        run: |
+          # Run Salesforce Code Analyzer
+          # https://pmd.github.io/pmd/pmd_rules_apex.html
+          # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
+          mkdir scanned_reports
+          # sf scanner run --format html --target "delta/force-app/main/default" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+
+      - name: Upload Scanner Result as Artefacts
+        if: always() # success() || failure()
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: scan-reports
+          path: ${{ env.OUTPUT_FILE }}
+          if-no-files-found: ignore
+
+      - name: Decrypt JWT Key
+        run: |
+          # Decrypt the JWT key
+          openssl enc -nosalt -aes-256-cbc -d -in ${{ secrets.JWT_ENCRYPTION_KEY_FILE }} -out ${{ secrets.JWT_KEY_FILE }} -base64 -K ${{ secrets.ENCRYPTION_KEY }} -iv ${{ secrets.ENCRYPTION_IV }}
+      - name: Authenticate to Salesforce
+        run: |
+          # Authenticate to Salesforce
+          sf org login jwt --username ${{ secrets.SF_USER_NAME }} --jwt-key-file ${{ secrets.JWT_KEY_FILE }} --client-id ${{ secrets.CONSUMER_KEY }} --set-default --alias ${{ inputs.SF_ALIAS }} --instance-url ${{ inputs.SF_INSTANCE_URL }}
+
+      - name: Run the LocalTest Cases 
+        run: |
+          # Run the LocalTest Cases
+          # https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm
+          sf apex run test --target-org ${{ inputs.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+      
+      - name: Check the Code Coverage in Target Org
+        run : |
+          python CODE_COVERAGE.py
+
+      - name: SonarQube Scan
+        # SonarQube, SonarSource, SonarCloud, SonarScanner
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.apex.coverage.reportPath=test-result-codecoverage.json
+            -Dsonar.verbose=true
+            -Dsonar.language=apex
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.coverage.exclusions=**/*Test.cls
+            -Dsonar.exclusions=**/*.cmp,**/force-app/**/fflib_*.cls,**/*.yml,**/*.js,**/*.xml,**/*.css,**/*.html,**/*.woff2,**/*.woff,**/*.auradoc,**/*.svg,force-app/main/default/staticresources/**
+      
+      # CodeCov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          flags: Apex
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Validate Pre-Destructive Changes in Salesforce
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+        run: |
+          if grep -q '<types>' delta/destructiveChanges/destructiveChanges.xml ; then
+            echo "---- Validate Pre-Destructive Changes in Salesforce ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --pre-destructive-changes delta/destructiveChanges/destructiveChanges.xml --manifest delta/destructiveChanges/package.xml --dry-run --wait 10
+          else
+            echo "---- No changes to validate ----"
+          fi
+
+      - name: Validate to Salesforce
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+        run: |
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --dry-run --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+
+      - name: Validate to Salesforce (UAT)
+        if: ${{ inputs.BRANCH_NAME == 'uat' }}
+        run: |
+          echo "Running for the UAT Branch"
+
+      - name: Deploy Pre-Destructive Changes in Salesforce
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' }}
+        run: |
+          if grep -q '<types>' delta/destructiveChanges/destructiveChanges.xml ; then
+            echo "---- Deploy Pre-Destructive Changes in Salesforce ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --pre-destructive-changes delta/destructiveChanges/destructiveChanges.xml --manifest delta/destructiveChanges/package.xml --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+
+      - name: Deploy to Salesforce
+        # PR is merged and it's in Closed Status --> Deploy the changes
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' }}
+        run: |
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+
+      - name: Deploy Post-Destructive Changes in Salesforce
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' }}
+        run: |
+          if grep -q '<types>' destructiveChanges/postDestructiveChanges.xml ; then
+            echo "---- Deploy Pre-Destructive Changes in Salesforce ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --post-destructive-changes destructiveChanges/destructiveChanges.xml --manifest destructiveChanges/package.xml --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
