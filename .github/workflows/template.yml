@@ -40,6 +40,7 @@ env:
   OUTPUT_FILE: "scanned_reports/scan-reports.html"
   # SF_ALIAS_VAR: "prod"
   TEST_LEVEL: "RunLocalTests"
+  APEX_TEST_CLASSES: LoggerTest PermUtilsTest
 
 jobs:
   build:
