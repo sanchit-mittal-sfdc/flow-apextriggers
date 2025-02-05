@@ -10,7 +10,9 @@ public with sharing class LoggerTest {
     
     @testSetup
     static void setup() {
-        // Create test data if needed
+        /** Create An Account Record */
+        Account testAccount = new Account(Name = 'Test Account');
+        insert testAccount;
     }
 
     @isTest
