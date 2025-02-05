@@ -6,6 +6,7 @@
  * @last modified by  : Amit Singh
 **/
 public with sharing class Logger {
+    public static Boolean isException = True;
     public ErrorLog__c logRecord;
     public Logger() {
         this.logRecord = new ErrorLog__c();

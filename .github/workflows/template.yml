@@ -59,8 +59,12 @@ jobs:
 
       - name: Read the PR Body
         run: |
-          echo "${{ github.event.pull_request.body }}"
-          echo "${{ github.event.pull_request.body }}" >> pr_body.txt
+          # echo "${{ github.event.pull_request.body }}"
+          echo "${{ github.event.pull_request.body }}" > pr_body.txt
+          python PRBODY_TESTCLASS.py > output.txt
+          cat output.txt
+          echo "apex_classes=$(cat output.txt)" >> $GITHUB_ENV
+          echo "${{ env.apex_classes }}"
           
       - name: Install Salesforce CLI
         run: |
