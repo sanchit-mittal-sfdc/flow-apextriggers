@@ -3,7 +3,7 @@ public with sharing class PermUtils {
     @AuraEnabled
     public static string BLAHBLAH(){
         try {
-            return "Hello World";
+            return 'Hello World';
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
