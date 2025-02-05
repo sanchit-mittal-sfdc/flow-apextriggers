@@ -13,8 +13,8 @@ def extract_apex_classes(file_path): # pr_body.txt
         print(apex_classes_string)
         return apex_classes_string  # Return as a string
     else:
-        print("No Apex class found")
-        return "No Apex class found"
+        print("No Apex classes found")
+        return "No Apex classes found"
 
 # Main method that runs automatically
 if __name__ == "__main__":
