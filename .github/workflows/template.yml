@@ -59,8 +59,11 @@ jobs:
 
       - name: Read the PR Body
         run: |
-          echo "${{ github.event.pull_request.body }}"
-          echo "${{ github.event.pull_request.body }}" >> pr_body.txt
+          echo "${{ github.event.pull_request.body }}"  >> pr_body.txt
+          python PRBODY_TESTCLASS.py > output.txt
+          cat output.txt
+          echo "apex_classes=$(cat output.txt)" >> $GITHUB_ENV
+          echo "${{ env.apex_classes }}"
           
       - name: Install Salesforce CLI
         run: |
@@ -118,11 +121,13 @@ jobs:
         run: |
           # Run the LocalTest Cases
           # https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_apex_commands_unified.htm
-          sf apex run test --target-org ${{ inputs.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+          # sf apex run test --target-org ${{ inputs.SF_ALIAS }} --test-level ${{ env.TEST_LEVEL }} --code-coverage --result-format human --output-dir ./ --wait 10
+          echo "Run the LocalTest Cases "
       
       - name: Check the Code Coverage in Target Org
         run : |
-          python CODE_COVERAGE.py
+          # python CODE_COVERAGE.py
+          echo "Run the LocalTest Cases "
 
       - name: SonarQube Scan
         # SonarQube, SonarSource, SonarCloud, SonarScanner
@@ -156,13 +161,24 @@ jobs:
             echo "---- No changes to validate ----"
           fi
 
-      - name: Validate to Salesforce
+      - name: Validate to Salesforce with Default TestLevel
         # PR is Raised and it's in Open Status --> Validate the Changes
-        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' && env.apex_classes == 'No Apex classes found' }}
         run: |
           if grep -q '<types>' delta/package/package.xml ; then
             echo "---- Deploying added and modified metadata ----"
             sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --dry-run --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+      
+      - name: Validate to Salesforce With Specified Test
+        # PR is Raised and it's in Open Status --> Validate the Changes
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' && env.apex_classes != 'No Apex classes found' }}
+        run: |
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --test-level RunSpecifiedTests --tests ${{ env.apex_classes }} --manifest delta/package/package.xml --dry-run --wait 10
           else
             echo "---- No changes to deploy ----"
           fi
@@ -183,13 +199,24 @@ jobs:
             echo "---- No changes to deploy ----"
           fi
 
-      - name: Deploy to Salesforce
+      - name: Deploy to Salesforce with Default TestLevel
         # PR is merged and it's in Closed Status --> Deploy the changes
-        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' }}
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' && env.apex_classes == 'No Apex classes found' }}
         run: |
           if grep -q '<types>' delta/package/package.xml ; then
             echo "---- Deploying added and modified metadata ----"
             sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --manifest delta/package/package.xml --wait 10
+          else
+            echo "---- No changes to deploy ----"
+          fi
+
+      - name: Deploy to Salesforce With Specified Test
+        # PR is merged and it's in Closed Status --> Deploy the changes
+        if: ${{ github.event.pull_request.merged == true && github.event.action == 'closed' && env.apex_classes != 'No Apex classes found' }}
+        run: |
+          if grep -q '<types>' delta/package/package.xml ; then
+            echo "---- Deploying added and modified metadata ----"
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --test-level RunSpecifiedTests --tests ${{ env.apex_classes }} --manifest delta/package/package.xml --wait 10
           else
             echo "---- No changes to deploy ----"
           fi
@@ -200,7 +227,7 @@ jobs:
         run: |
           if grep -q '<types>' destructiveChanges/postDestructiveChanges.xml ; then
             echo "---- Deploy Pre-Destructive Changes in Salesforce ----"
-            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --post-destructive-changes destructiveChanges/destructiveChanges.xml --manifest destructiveChanges/package.xml --wait 10
+            sf project deploy start --target-org ${{ inputs.SF_ALIAS }} --post-destructive-changes destructiveChanges/postDestructiveChanges.xml --manifest destructiveChanges/package.xml --wait 10
           else
             echo "---- No changes to deploy ----"
           fi

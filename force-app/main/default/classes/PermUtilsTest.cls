@@ -1,5 +1,12 @@
 @isTest
 public class PermUtilsTest {
+
+    @TestSetup
+    static void makeData(){
+        /** Create Account Record */
+        Account accWithSite = new Account(Name = 'Account With Site');
+        insert accWithSite;
+    }
     
     @isTest
     static void testHasBrowseSolutions() {
