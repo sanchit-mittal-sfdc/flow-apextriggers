@@ -83,10 +83,6 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*Repo:*\n<$${{ github.repositoryUrl }}| $${{github.repository}}>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Access the PR URL :point_right:*\n\*<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build>*"
                     }
                   ]
                 }
