@@ -84,7 +84,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Type:*\nComputer (laptop)"
+                      "text": "*User:*\n${{ github.actor }}"
                     },
                     {
                       "type": "mrkdwn",
@@ -100,7 +100,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Specs:*\n\"Cheetah Pro 15\" - Fast, really fast\""
+                      "text": "*Access the Build URL HERE -:*\n\"${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                     }
                   ]
                 }
