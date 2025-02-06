@@ -64,19 +64,13 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            # text: "*GitHub Action build result*: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-            # blocks:
-            #  - type: "section"
-            #    text:
-            #      type: "mrkdwn"
-            #      text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
             {
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "The Build has started:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|click here to access>*"
                   }
                 },
                 {
@@ -88,19 +82,11 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*When:*\nSubmitted Aut 10"
+                      "text": "*Repo:*\n<$${{ github.repositoryUrl }}| $${{github.repository}}>"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Last Update:*\nMar 10, 2015 (3 years, 5 months)"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Reason:*\nAll vowel keys aren't working."
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Access the Build URL HERE -:*\n\"${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      "text": "*Access the PR URL :point_right:*\n\*<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build>*"
                     }
                   ]
                 }
@@ -301,7 +287,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "The Build Completed:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|click here to access>*"
                   }
                 },
                 {
@@ -309,7 +295,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Type:*\nComputer (laptop)"
+                      "text": "*User:*\n${{ github.actor }}"
                     },
                     {
                       "type": "mrkdwn",
@@ -325,7 +311,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Specs:*\n\"Cheetah Pro 15\" - Fast, really fast\""
+                      "text": "*Access the PR URL :point_right:*\n\${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                     }
                   ]
                 }
