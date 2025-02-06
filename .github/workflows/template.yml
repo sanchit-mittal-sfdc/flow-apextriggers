@@ -131,13 +131,6 @@ jobs:
 
       - name: Verify SF CLI Installation
         run: sf --version
-          
-      - name: Install Salesforce CLI (if not cached)
-        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
-        run: |
-          # Use Node.js to install Salesforce CLI
-          npm install -g @salesforce/cli
-          sf --version
 
       - name: Install SF DX GIT DELTA
         if: steps.cache-sf-cli.outputs.cache-hit != 'true'
