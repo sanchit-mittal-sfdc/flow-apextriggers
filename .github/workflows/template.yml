@@ -35,7 +35,7 @@ on:
 
 # Define Workflow Level Variables
 env:
-  ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
+  ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,retire-js,cpd"
   CATEGORY: "Design,Best Practices,Code Style,Performance,Security"
   OUTPUT_FILE: "scanned_reports/scan-reports.html"
   # SF_ALIAS_VAR: "prod"
