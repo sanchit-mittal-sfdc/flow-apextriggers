@@ -126,26 +126,29 @@ jobs:
       - name: Verify SF CLI Installation
         run: sf --version
           
-      - name: Install Salesforce CLI
+      - name: Install Salesforce CLI (if not cached)
         if: steps.cache-sf-cli.outputs.cache-hit != 'true'
         run: |
           # Use Node.js to install Salesforce CLI
           npm install -g @salesforce/cli
           sf --version
       - name: Install Salesforce Code Analyzer
+        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
         run: |
           # Install Salesforce Code Analyzer
           sf plugins install @salesforce/sfdx-scanner
 
       - name: Install SF DX GIT DELTA
+        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
         run: |
           # Install SF DX GIT DELTA
           echo 'y' | sf plugins install sfdx-git-delta
-          mkdir delta
+          # mkdir delta
 
       - name: Generate Delta for deployment
         # https://github.com/scolladon/sfdx-git-delta
         run: |
+          mkdir delta
           # Generate Delta for deployment
           # https://github.com/scolladon/sfdx-git-delta
           sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir ./delta --generate-delta --ignore-whitespace --ignore-file .sgdignore
