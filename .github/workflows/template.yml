@@ -57,7 +57,41 @@ jobs:
         with:
           python-version: '3.13' 
 
-      
+      - name: Post a message in a channel
+        if: always()
+        uses: slackapi/slack-github-action@v2
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "The Build has started:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }} | click here to access>*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*User:*\n${{ github.actor }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repo:*\n<$${{ github.repositoryUrl }}| $${{github.repository}}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*BuildRL :point_right:*\n*<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} | build>*"
+                    }
+                  ]
+                }
+              ]
+            }
 
       - name: Read the PR Body
         run: |
@@ -253,7 +287,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "The Build Completed:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|click here to access>*"
+                    "text": "The Build has started:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }} | click here to access>*"
                   }
                 },
                 {
@@ -265,19 +299,11 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*When:*\nSubmitted Aut 10"
+                      "text": "*Repo:*\n<$${{ github.repositoryUrl }}| $${{github.repository}}>"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Last Update:*\nMar 10, 2015 (3 years, 5 months)"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Reason:*\nAll vowel keys aren't working."
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Access the PR URL :point_right:*\n\${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      "text": "*BuildRL :point_right:*\n*<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} | build>*"
                     }
                   ]
                 }
