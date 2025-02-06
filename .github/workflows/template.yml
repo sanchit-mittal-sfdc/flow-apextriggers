@@ -104,7 +104,7 @@ jobs:
       - name: Configure npm Global Directory
         id: npm-prefix-dir
         run: |
-          # Set npm's global install directory to a user-writable path
+          ## Set npm's global install directory to a user-writable path
           npm config set prefix ~/.npm-global
           # Add the directory to PATH for immediate access
           echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
