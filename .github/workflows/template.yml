@@ -100,8 +100,34 @@ jobs:
           cat output.txt
           echo "apex_classes=$(cat output.txt)" >> $GITHUB_ENV
           echo "${{ env.apex_classes }}"
+
+      - name: Configure npm Global Directory
+        run: |
+          # Set npm's global install directory to a user-writable path
+          npm config set prefix ~/.npm-global
+          # Add the directory to PATH for immediate access
+          echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
+
+      - name: Cache Salesforce CLI
+        uses: actions/cache@v3
+        id: cache-sf-cli
+        with:
+          path: |
+            ~/.npm-global
+            ~/.npm
+            ~/.sf
+            ~/.sfdx
+          key: ${{ runner.os }}-sf-cli-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Salesforce CLI (if not cached)
+        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
+        run: npm install -g @salesforce/cli
+
+      - name: Verify SF CLI Installation
+        run: sf --version
           
       - name: Install Salesforce CLI
+        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
         run: |
           # Use Node.js to install Salesforce CLI
           npm install -g @salesforce/cli
@@ -281,7 +307,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "The Build has started:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }} | click here to access>*"
+                    "text": "The Build was completed:\n*<${{ github.event.pull_request.html_url || github.event.head_commit.url }} | click here to access>*"
                   }
                 },
                 {
