@@ -119,9 +119,9 @@ jobs:
             ~/.npm
             ~/.sf
             ~/.sfdx
-            node_modules
-            ${{ steps.npm-prefix-dir.outputs.dir }}/lib/node_modules/@salesforce
-            ${{ steps.npm-prefix-dir.outputs.dir }}/bin/sf
+            ~/node_modules
+            ~/node_modules/@salesforce
+            ~/bin/sf
             ~/.local/share/sf
           key: ${{ runner.os }}-sf-cli-${{ hashFiles('**/package-lock.json') }}
 
