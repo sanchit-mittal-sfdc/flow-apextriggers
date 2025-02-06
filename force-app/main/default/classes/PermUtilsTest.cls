@@ -8,6 +8,7 @@ public class PermUtilsTest {
         insert accWithSite;
         /** Create Contact Record */
         Contact conWithAcc = new Contact(FirstName = 'FirstName', LastName = 'LastName', AccountId = accWithSite.Id);
+        insert conWithAcc;
     }
     
     @isTest
