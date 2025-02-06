@@ -132,14 +132,14 @@ jobs:
           # Use Node.js to install Salesforce CLI
           npm install -g @salesforce/cli
           sf --version
-      - name: Install Salesforce Code Analyzer
-        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
-        run: |
-          # Install Salesforce Code Analyzer
-          sf plugins install @salesforce/sfdx-scanner
+      #- name: Install Salesforce Code Analyzer
+        # if: steps.cache-sf-cli.outputs.cache-hit != 'true'
+      #  run: |
+      #    # Install Salesforce Code Analyzer
+      #    sf plugins install @salesforce/sfdx-scanner
 
       - name: Install SF DX GIT DELTA
-        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
+        # if: steps.cache-sf-cli.outputs.cache-hit != 'true'
         run: |
           # Install SF DX GIT DELTA
           echo 'y' | sf plugins install sfdx-git-delta
