@@ -108,7 +108,7 @@ jobs:
           npm config set prefix ~/.npm-global
           # Add the directory to PATH for immediate access
           echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
-          echo "dir=$(npm config get prefix)" >> $GITHUB_OUTPUT
+          # echo "dir=$(npm config get prefix)" >> $GITHUB_OUTPUT
 
       - name: Cache Salesforce CLI
         uses: actions/cache@v3
@@ -138,11 +138,6 @@ jobs:
           # Use Node.js to install Salesforce CLI
           npm install -g @salesforce/cli
           sf --version
-      #- name: Install Salesforce Code Analyzer
-        # if: steps.cache-sf-cli.outputs.cache-hit != 'true'
-      #  run: |
-      #    # Install Salesforce Code Analyzer
-      #    sf plugins install @salesforce/sfdx-scanner
 
       - name: Install SF DX GIT DELTA
         if: steps.cache-sf-cli.outputs.cache-hit != 'true'
@@ -163,13 +158,19 @@ jobs:
           cat ./delta/destructiveChanges/destructiveChanges.xml
           ls -l ./delta
 
+      - name: Install Salesforce Code Analyzer
+        if: steps.cache-sf-cli.outputs.cache-hit != 'true'
+        run: |
+          # Install Salesforce Code Analyzer
+          sf plugins install @salesforce/sfdx-scanner
+
       - name: Run Salesforce Code Analyzer
         run: |
           # Run Salesforce Code Analyzer
           # https://pmd.github.io/pmd/pmd_rules_apex.html
           # https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/run.html
           mkdir scanned_reports
-          # sf scanner run --format html --target "delta/force-app/main/default" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
+          sf scanner run --format html --target "delta/force-app/main/default" --engine ${{ env.ENGINES }} --category ${{ env.CATEGORY }} --outfile ${{ env.OUTPUT_FILE }}
 
       - name: Upload Scanner Result as Artefacts
         if: always() # success() || failure()
