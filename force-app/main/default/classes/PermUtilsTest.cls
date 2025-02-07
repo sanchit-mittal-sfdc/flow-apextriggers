@@ -9,6 +9,12 @@ public class PermUtilsTest {
         /** Create Contact Record */
         Contact conWithAcc = new Contact(FirstName = 'FirstName', LastName = 'LastName', AccountId = accWithSite.Id);
         insert conWithAcc;
+        /** Create a Case Record */
+        Case testCase = new Case(Status = 'New', Origin = 'Phone', Priority='High', ContactId = conWithAcc.Id);
+        insert testCase;
+
+        /** Create a Child Case */
+        Case childCase = new Case(Status = 'New', Origin = 'Phone', Priority='High', ParentId = testCase.Id);
     }
     
     @isTest
