@@ -11,16 +11,16 @@ on:
   #  paths:
   #    - 'force-app/**'
 
-  pull_request:
-    branches:
-      - master
-      - main
-    paths:
-      - 'force-app/**'
-    types:
-      - opened
-      - synchronize
-      - closed
+  #pull_request:
+  #  branches:
+  #    - master
+  #   - main
+  #  paths:
+  #    - 'force-app/**'
+  #  types:
+  #    - opened
+  #    - synchronize
+  #    - closed
 # Define Workflow Level Variables
 env:
   ENGINES: "eslint,eslint-lwc,eslint-typescript,pmd,pmd-appexchange,retire-js,sfge,cpd"
