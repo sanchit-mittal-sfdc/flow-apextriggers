@@ -108,7 +108,6 @@ jobs:
           npm config set prefix ~/.npm-global
           # Add the directory to PATH for immediate access
           echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
-          # echo "dir=$(npm config get prefix)" >> $GITHUB_OUTPUT
 
       - name: Cache Salesforce CLI
         uses: actions/cache@v3
@@ -123,7 +122,7 @@ jobs:
             ~/node_modules/@salesforce
             ~/bin/sf
             ~/.local/share/sf
-          key: ${{ runner.os }}-sf-cli-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-sf-cli-${{ hashFiles('**/package.json') }}
 
       - name: Install Salesforce CLI (if not cached)
         if: steps.cache-sf-cli.outputs.cache-hit != 'true'
