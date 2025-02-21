@@ -8,9 +8,4 @@ public with sharing class PermUtils {
             throw new AuraHandledException(e.getMessage());
         }
     }
-
-    @AuraEnabled
-    public static Boolean hasBrowseSolutions(){
-        return SolutionsUtils.hasBrowseSolutions();
-    }
 }
